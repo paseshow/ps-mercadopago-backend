@@ -1,0 +1,31 @@
+{
+  "name": "ws-paseshow-mercadopago",
+  "version": "1.0.0",
+  "description": "Backend realizado en nodeJs con express para la integracion de mercado pago en el sitioWeb PaseShow",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "PaseShow",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "bcrypt": "^5.0.1",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "mercadopago": "^1.5.7",
+    "mysql": "^2.18.1",
+    "node-schedule": "^2.0.0",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7",
+    "standard": "^16.0.3"
+  }
+}
