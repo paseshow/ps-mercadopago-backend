@@ -10,8 +10,8 @@ class SocketService {
 
   emiter(event, body) {
     console.log('Reserva exportada: ' + body);
-    if(body)
-      this.io.emit(event, body);
+    
+    if(body) this.io.emit(event, body);
   }
 }
 

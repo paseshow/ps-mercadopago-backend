@@ -49,11 +49,8 @@ function findAll(table, limit) {
         const connecting = connect();
         
         connecting.query(`SELECT ${limit ? `TOP ${limit} *` : '*'} FROM ${table} ${limit ? 'DESC' : ''}`, (error, result) => {
-            if(error) {
-
-            } else {
-                resolve(result);
-            }
+            if(error) {}
+            else  resolve(result);
         });
     });
 };
@@ -64,11 +61,9 @@ function findById(table, field, value) {
         const connecting = connect();
 
         connecting.query(`SELECT * FROM ${table} WHERE ${field} = ${value};`, (error, result) => {
-            if (error) {
+            if (error) {}
 
-            } else {
-                resolve(result);
-            }
+            else resolve(result);
         });
     });
 };
@@ -78,12 +73,7 @@ function findByWhere(table, where) {
         const connecting = connect();
 
         connecting.query(`SELECT * FROM ${table} where ${where}`, (error, result) => {
-            if(error) {
-                resolve(result);
-            }
-            else {
-                resolve(result);
-            }
+            resolve(result);
         });
     })
 };

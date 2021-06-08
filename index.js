@@ -2,6 +2,23 @@ require('dotenv').config();
 
 const express = require('express');
 const app = express();
+const cors = require('cors');
+const { appConfig } = require('./src/config/configServer');
+
+// LOG'S  ------------------------------------------------------
+const fs = require('fs');
+const util = require('util');
+const logFile = fs.createWriteStream(__dirname + '/node.log', { flags: 'w' });
+const logStdout = process.stdout;
+
+console.log = function(d) {
+    //console.log(d);
+    logFile.write(util.format(d) + '\n');
+    logStdout.write(util.format(d) + '\n');
+};
+// -----------------------------------------------------------
+
+
 
 // LOGIN, REGISTRO USUARIOS  ------------------------------
 const session = require('express-session');
@@ -11,9 +28,6 @@ const PassportLocal = require('passport-local').Strategy;
 
 const bcrypt = require('bcrypt');
 // -------------------------------------------------------
-
-const cors = require('cors');
-const { appConfig } = require('./src/config/configServer');
 
 // RUTAS  ----------------------------------------------------------
 const routerCheckout = require('./src/routes/checkout');
@@ -27,9 +41,7 @@ const routerAuthentication = require('./src/routes/authentication');
 
 
 const { findById } = require('./src/config/dataBase');
-
 const SocketService = require('./src/config/socketIo');
-
 const isTest = true;
 
 app.use(cors());
@@ -47,12 +59,12 @@ app.use(passport.session());
 passport.use(new PassportLocal(function (username, password, done) {
     findById('usuarios', 'username', username).then(
         resultFind => {
-            bcrypt.compare(password, resultFind[0].pass, function(err, result) {
-                if(result) {
-                    return done(null, { id: resultFind[0].id, name: resultFind[0].username.toString() });
-                } else {
-                    done(null, false);
-                }
+            bcrypt.compare(password, resultFind[0].pass, function (err, result) {
+
+                if (result) return done(null, { id: resultFind[0].id, name: resultFind[0].username.toString() });
+
+                done(null, false);
+
             });
         }
     );
@@ -77,16 +89,13 @@ app.use('/security', routerSecurityMp);
 app.use('/notifications', routerNotificactionsMp);
 app.use('/reservas', routerReservas);
 app.use('/authentication', routerAuthentication);
-
 app.use('/views', express.static('./src/views'));
-
 
 const server = require('http').Server(app);
 
 server.listen(appConfig.port, () => {
-    if (isTest) {
-        process.env.URL_PASESHOW = 'https://www.paseshow.com.ar/test/';
-    }
+    if (isTest) process.env.URL_PASESHOW = 'https://www.paseshow.com.ar/test/';
+
     console.log(`${isTest ? 'TEST' : 'PROD'} - Server run port: ${appConfig.port}`)
 });
 
