@@ -5,21 +5,21 @@ router.post('', (req, res) => {
 
     try {
 
-        let topic = req.params.topic; //  tipo de recurso
-        let id = req.params.id; // identificador del recurso notificado
+        let topic = req.query.topic; //  tipo de recurso
+        let id = req.query.id; // identificador del recurso notificado
 
         if (topic == 'payment') {
             // pagos recibidos
-            console.log('paymeny' + id);
+            console.log('paymeny ' + id);
         } else if (topic == 'chargebacks') {
             // devoluciones de cargo recibidas
-            console.log('chargebacks' + id);
+            console.log('chargebacks ' + id);
         } else {
             console.log(id);
         }
 
         res.status(200);
-        return res;
+        return res.json();
 
     } catch (error) {
         res.status(400);
