@@ -12,37 +12,28 @@ router.put((''), (req, res) => {
         let nombreCuenta = req.body.nombreCuenta;
         let nombre = req.body.nombre;
         let eventoId = req.body.eventoId;
+        let id = req.body.id;
+
+        if (id) {
+            Update('securityMercadoPago', data, req.body.id).then(result => {
+                res.status(200);
+                if (result.affectedRows > 0)
+                    return res.json('Exits');
+            })
+        }
 
         Insert('securityMercadoPago', {
             accessToken, publicKey, userIdMp, nombreCuenta, nombre, eventoId
         }).then(result => {
             res.status(200);
-           return res.json( { id: result.insertId});
+            return res.json({ id: result.insertId });
         })
+
     } catch (error) {
         return res.json({ error: error });
     }
 });
 
-router.post(('/update'), (req, res) => {
-
-    try {
-        let data =  `id = ${req.body.id},
-         accessToken = '${req.body.accessToken}',
-         publicKey = '${req.body.publicKey}',
-         userIdMp = ${req.body.userIdMp},
-         nombreCuenta = '${req.body.nombreCuenta}',
-         nombre = '${req.body.nombre}'`;
-         
-        Update('securityMercadoPago', data, req.body.id).then(result => {
-            res.status(200);
-            if(result.affectedRows > 0)
-           return res.json( 'Exits' );
-        })
-    } catch (error) {
-        return res.json({ error: error });
-    }
-});
 
 router.get(('/:id'), (req, res) => {
 
@@ -58,9 +49,9 @@ router.get(('/:id'), (req, res) => {
                 }
             }
         )
-    }catch (error){
+    } catch (error) {
         res.status(400);
-        return res.json({"error": error});
+        return res.json({ "error": error });
     }
 });
 

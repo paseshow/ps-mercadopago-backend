@@ -89,7 +89,8 @@ app.use('/security', routerSecurityMp);
 app.use('/notifications', routerNotificactionsMp);
 app.use('/reservas', routerReservas);
 app.use('/authentication', routerAuthentication);
-app.use('/views', express.static('./src/views'));
+app.use('/', express.static('./src/views'));
+
 
 const server = require('http').Server(app);
 
