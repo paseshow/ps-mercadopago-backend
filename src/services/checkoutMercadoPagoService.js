@@ -47,7 +47,7 @@ function getPaymentsById(paymentId, req) {
 
 
     try {
-        findByFieldSpecific('securityMercadoPago', 'nombre', '"pasesh"').then(
+        findByFieldSpecific('securityMercadoPago', 'nombre', '"paseshow"').then(
             result => {
                 axios.get(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
                     headers: {
