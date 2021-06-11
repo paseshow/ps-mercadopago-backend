@@ -15,6 +15,14 @@ router.put((''), (req, res) => {
         let id = req.body.id;
 
         if (id) {
+
+            let data = `id = ${req.body.id},
+                        accessToken = '${req.body.accessToken}',
+                        publicKey = '${req.body.publicKey}',
+                        userIdMp = ${req.body.userIdMp},
+                        nombreCuenta = '${req.body.nombreCuenta}',
+                        nombre = '${req.body.nombre}'`;
+
             Update('securityMercadoPago', data, req.body.id).then(result => {
                 res.status(200);
                 if (result.affectedRows > 0)
