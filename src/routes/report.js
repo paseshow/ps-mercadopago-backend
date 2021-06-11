@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const router = Router();
 
-const { findAll, findById } = require('../config/dataBase');
+const { findAll, findByFieldSpecific } = require('../config/dataBase');
 const { validAuthentication } = require('../services/authenticationService');
 
 router.get('/reservas', (req, res, next) => { validAuthentication(req, res, next) }, (req, res) => {
@@ -16,7 +16,7 @@ router.get('/reservas', (req, res, next) => { validAuthentication(req, res, next
 
 router.get('/reservas/:id', (req, res) => {
 
-    findById('reservaReferenceMp', 'reservaId', req.params.id).then(
+    findByFieldSpecific('reservaReferenceMp', 'reservaId', req.params.id).then(
         result => {
             return res.json(result[0]);
         }

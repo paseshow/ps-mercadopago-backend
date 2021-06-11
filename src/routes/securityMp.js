@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const router = Router();
-const { Insert, Update, findById } = require('../config/dataBase');
+const { Insert, Update, findByFieldSpecific } = require('../config/dataBase');
 
 
 router.put((''), (req, res) => {
@@ -38,7 +38,7 @@ router.put((''), (req, res) => {
 router.get(('/:id'), (req, res) => {
 
     try {
-        findById('securityMercadoPago', 'eventoId', req.params.id).then(
+        findByFieldSpecific('securityMercadoPago', 'eventoId', req.params.id).then(
             values => {
                 if (values.length > 0) {
                     res.status(200);

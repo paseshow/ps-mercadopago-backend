@@ -42,6 +42,22 @@ function Update(table, objectData,id) {
     });
 };
 
+function UpdateByFieldSpecific(table, objectData,id) {
+
+    return new Promise ( (resolve, reject) => {
+        const connecting = connect();
+
+        connecting.query(`UPDATE ${table} SET ${objectData} where ${id}`, (error, result) => {
+            if (error) {
+                console.log(`ERROR : UpdateByFieldSpecific data into table:${table}, ${error}`);
+            } else {
+                console.log(`SUCCESS: Update data in ${table} `);
+                resolve(result);
+            }
+        })
+    });
+};
+
 function findAll(table, limit) {
 
     return new Promise( (resolve,reject) => {
@@ -55,14 +71,13 @@ function findAll(table, limit) {
     });
 };
 
-function findById(table, field, value) {
+function findByFieldSpecific(table, field, value) {
 
     return new Promise((resolve, reject) => {
         const connecting = connect();
-
         connecting.query(`SELECT * FROM ${table} WHERE ${field} = ${value};`, (error, result) => {
-            if (error) {}
-
+            
+            if (error)  console.log(error); 
             else resolve(result);
         });
     });
@@ -82,7 +97,8 @@ module.exports = {
     connect,
     Insert,
     Update,
+    UpdateByFieldSpecific,
     findAll,
-    findById,
+    findByFieldSpecific,
     findByWhere
 };

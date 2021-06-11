@@ -1,7 +1,7 @@
 const axios = require('axios');
 const mercadopago = require('mercadopago');
 const checkoutMercadoPago = require('../services/checkoutMercadoPagoService');
-const { Insert, findById, findAll } = require('../config/dataBase');
+const { Insert, findByFieldSpecific } = require('../config/dataBase');
 
 async function validReservaId(token, reservaId, eventoId, res, req) {
 
@@ -14,12 +14,12 @@ async function validReservaId(token, reservaId, eventoId, res, req) {
             if (reservaById) {
 
                 try {
-                    findById('reservaReferenceMp', 'reservaId', reservaById.id).then(
+                    findByFieldSpecific('reservaReferenceMp', 'reservaId', reservaById.id).then(
                         values => {
 
                             if (values.length == "0") {
 
-                                findById('securityMercadoPago', 'eventoId', eventoId).then(
+                                findByFieldSpecific('securityMercadoPago', 'eventoId', eventoId).then(
                                     values => {
                                         if (values.length > 0) {
 

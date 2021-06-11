@@ -40,7 +40,7 @@ const routerAuthentication = require('./src/routes/authentication');
 // ------------------------------------------------------------------
 
 
-const { findById } = require('./src/config/dataBase');
+const { findByFieldSpecific } = require('./src/config/dataBase');
 const SocketService = require('./src/config/socketIo');
 const isTest = true;
 
@@ -57,7 +57,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.use(new PassportLocal(function (username, password, done) {
-    findById('usuarios', 'username', username).then(
+    findByFieldSpecific('usuarios', 'username', username).then(
         resultFind => {
             bcrypt.compare(password, resultFind[0].pass, function (err, result) {
 
@@ -75,7 +75,7 @@ passport.serializeUser(function (user, done) {
 });
 
 passport.deserializeUser(function (id, done) {
-    findById('usuarios', 'id', id).then(
+    findByFieldSpecific('usuarios', 'id', id).then(
         result => {
             done(null, { id: result[0].id, name: result[0].username.toString() });
         }
