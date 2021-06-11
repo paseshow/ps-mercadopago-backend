@@ -16,9 +16,8 @@ function Insert(table, objectData) {
         const connecting = connect();
         
         connecting.query(`INSERT INTO ${table} SET?`, objectData, (error, result) => {
-            if (error) {
-                console.log(`ERROR : Insert data into table:${table}, ${error}`);
-            } else {
+            if (error) console.log(`ERROR : Insert data into table:${table}, ${error}`);
+            else {
                 console.log(`SUCCESS: Insert data in ${table} `);
                 resolve(result);
             }
@@ -32,9 +31,8 @@ function Update(table, objectData,id) {
         const connecting = connect();
 
         connecting.query(`UPDATE ${table} SET ${objectData} where id = ${id}`, (error, result) => {
-            if (error) {
-                console.log(`ERROR : Update data into table:${table}, ${error}`);
-            } else {
+            if (error) console.log(`ERROR : Update data into table:${table}, ${error}`);
+            else {
                 console.log(`SUCCESS: Update data in ${table} `);
                 resolve(result);
             }
@@ -48,9 +46,8 @@ function UpdateByFieldSpecific(table, objectData,id) {
         const connecting = connect();
 
         connecting.query(`UPDATE ${table} SET ${objectData} where ${id}`, (error, result) => {
-            if (error) {
-                console.log(`ERROR : UpdateByFieldSpecific data into table:${table}, ${error}`);
-            } else {
+            if (error) console.log(`ERROR : UpdateByFieldSpecific data into table:${table}, ${error}`);
+            else {
                 console.log(`SUCCESS: Update data in ${table} `);
                 resolve(result);
             }
@@ -64,8 +61,8 @@ function findAll(table, limit) {
 
         const connecting = connect();
         
-        connecting.query(`SELECT ${limit ? `TOP ${limit} *` : '*'} FROM ${table} ${limit ? 'DESC' : ''}`, (error, result) => {
-            if(error) {}
+        connecting.query(`SELECT * FROM ${table} ${limit ? `order by id desc LIMIT ${limit}` : ''}`, (error, result) => {
+            if(error)  console.log(error); 
             else  resolve(result);
         });
     });
@@ -88,7 +85,8 @@ function findByWhere(table, where) {
         const connecting = connect();
 
         connecting.query(`SELECT * FROM ${table} where ${where}`, (error, result) => {
-            resolve(result);
+            if (error)  console.log(error); 
+            else resolve(result);
         });
     })
 };
