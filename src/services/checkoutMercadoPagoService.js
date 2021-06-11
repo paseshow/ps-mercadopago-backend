@@ -16,6 +16,7 @@ function createPreferences(requestBody) {
             "failure": "https://www.paseshow.com.ar/fail_mercadopago",
             "pending": "https://www.paseshow.com.ar/pending_mercadopago"
         },
+        auto_return: "http://localhost:8080/#/operacion-mercado-pago-info",
         payer: {
             "name": requestBody.clienteId.nombre,
             "surname": requestBody.clienteId.username,
@@ -42,11 +43,11 @@ function createPreferences(requestBody) {
     return preferences;
 }
 
-function getPaymentsById(paymentId) {
+function getPaymentsById(paymentId, req) {
 
 
     try {
-        findByFieldSpecific('securityMercadoPago', 'nombre', '"paseshow"').then(
+        findByFieldSpecific('securityMercadoPago', 'nombre', '"pasesh"').then(
             result => {
                 axios.get(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
                     headers: {
@@ -59,7 +60,12 @@ function getPaymentsById(paymentId) {
 
                         UpdateByFieldSpecific('reservaReferenceMp', data, where).then(
                             result => {
-                                console.log("Pago recibido - reserva: " + response.external_reference);
+                                findByFieldSpecific('reservaReferenceMp', 'reservaId', response.data.external_reference).then(
+                                    resultReserva => {
+                                        req.app.get("socketService").emiter('event', resultReserva[0]);
+                                        console.log("Pago recibido - reserva: " + response.data.external_reference);
+                                    }
+                                );
                             }
                         );
                     })

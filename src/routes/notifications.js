@@ -22,7 +22,7 @@ router.post('', (req, res) => {
         if (type == 'payment') {
             // pagos recibidos
             try {
-                checkoutMercadoPago.getPaymentsById(id);
+                checkoutMercadoPago.getPaymentsById(id, req);
 
                 res.status(200);
                 return res.json();
