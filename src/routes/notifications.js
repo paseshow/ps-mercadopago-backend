@@ -15,7 +15,7 @@ router.post('', (req, res) => {
             if (value == "type" || value == "topic")
                 type = queryReq[value];
 
-            if (value.includes("id"))
+            else if (value.includes("id"))
                 id = queryReq[value];
         }
 
@@ -34,6 +34,9 @@ router.post('', (req, res) => {
             //https://api.mercadopago.com/v1/chargebacks/{id}
             // devoluciones de cargo recibidas
             console.log('chargebacks ' + id);
+
+            res.status(200);
+            return res.json();
         } else {
             //merchant_order: orden para pagar
             try {

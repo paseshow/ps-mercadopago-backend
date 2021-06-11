@@ -6,7 +6,7 @@ const { validAuthentication } = require('../services/authenticationService');
 
 router.get('/reservas', (req, res, next) => { validAuthentication(req, res, next) }, (req, res) => {
 
-    findAll('reservaReferenceMp', req.params.limit ? req.params.limit : null).then(
+    findAll('reservaReferenceMp', req.query.limit ? req.query.limit : null).then(
         result => {
             return res.json(result);
         }

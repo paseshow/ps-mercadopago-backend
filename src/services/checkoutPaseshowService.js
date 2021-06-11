@@ -121,7 +121,13 @@ async function getEventoes(token, res) {
 
 };
 
+async function notifcationsReservaApproved(reservaId) {
+
+    
+};
+
 module.exports = {
     validReservaId,
-    getEventoes
+    getEventoes,
+    notifcationsReservaApproved
 }
