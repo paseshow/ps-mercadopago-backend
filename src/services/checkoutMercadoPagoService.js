@@ -33,7 +33,7 @@ function createPreferences(requestBody) {
                 "zip_code": requestBody.clienteId.cp
             }
         },
-        notification_url: "https://www.your-site.com/ipn", // notificaiones para estados de los procesos
+        notification_url: "https://api2.test.mercadopago.paseshow.com.ar/notifications", // notificaiones para estados de los procesos
         statement_descriptor: "PaseShow", //descripcion que aparecera en el resumen de tarjeta del comprador
         external_reference: requestBody.id.toString(),
     };
