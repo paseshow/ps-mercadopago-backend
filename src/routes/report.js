@@ -4,7 +4,7 @@ const router = Router();
 const { findAll, findByFieldSpecific } = require('../config/dataBase');
 const { validAuthentication } = require('../services/authenticationService');
 
-router.get('/reservas', (req, res, next) => { validAuthentication(req, res, next) }, (req, res) => {
+router.get('/reservas', (req, res) => {
 
     findAll('reservaReferenceMp', req.query.limit ? req.query.limit : null).then(
         result => {
