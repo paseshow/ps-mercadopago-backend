@@ -17,7 +17,7 @@ async function generatedTokenPaseshow(username, password, res) {
     let urlPaseshow = `${process.env.URL_PASESHOW}usuarios/authenticate`;
 
     let data = qs.stringify({
-        'password': password ? password : 'pinares3631',
+        'password': password ? password : 'miguel01',
         'username': username ? username : '25858046'
     });
 

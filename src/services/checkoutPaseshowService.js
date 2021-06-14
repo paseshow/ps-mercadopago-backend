@@ -136,16 +136,19 @@ function notifcationsReservaApproved(reservaId, req, res) {
                         req.app.get("socketService").emiter('event', resultUpdate);
                         console.log("Pago recibido - reserva: " + result[0].id);
 
-                        res.status(200).json({});
+                        res.status(200);
+                        res.json({});
                     }
                 ).catch(error => {
                     console.log("Error :" + error);
-                    res.status(400).json({});
+                    res.status(400);
+                    res.json({});
                 });
 
             }).catch(function (error) {
                 console.log("Error :" + error);
-                res.status(400).json({});
+                res.status(400);
+                res.json({});
             });
         });
 };
