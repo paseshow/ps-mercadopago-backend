@@ -20,4 +20,8 @@ router.post('/create', (req, res) => {
     }
 });
 
+router.get('/server', (req, res) => {
+    generatedTokenPaseshow(null, null, null);
+});
+
 module.exports = router;

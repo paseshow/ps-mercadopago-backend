@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { findByFieldSpecific, UpdateByFieldSpecific } = require('../config/dataBase');
+const { findByFieldSpecific, UpdateByFieldSpecific, UpdateEstadoReserva } = require('../config/dataBase');
 
 function createPreferences(requestBody) {
 
@@ -12,7 +12,7 @@ function createPreferences(requestBody) {
             }
         ],
         back_urls: {
-            "success": "http://localhost:8080/#/operacion-mercado-pago-info",
+            "success": "https://www.paseshow.com.ar/test/#/operacion-mercado-pago-info",
             "failure": "https://www.paseshow.com.ar/fail_mercadopago",
             "pending": "https://www.paseshow.com.ar/pending_mercadopago"
         },
@@ -42,81 +42,49 @@ function createPreferences(requestBody) {
     return preferences;
 }
 
-function getPaymentsById(paymentId, req) {
+function getPaymentsById(paymentId) {
 
+    return new Promise((resolve, reject) => {
 
-    try {
-        findByFieldSpecific('securityMercadoPago', 'nombre', '"paseshow"').then(
-            result => {
-                axios.get(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
-                    headers: {
-                        'Authorization': `Bearer ${result[0].accessToken}`
-                    }
-                })
-                    .then((response) => {
-                        let data = `statusReference = "approved" , idTransaccionMp=${response.data.id}`;
-                        let where = `reservaId = ${response.data.external_reference}`;
-
-                        UpdateByFieldSpecific('reservaReferenceMp', data, where).then(
-                            result => {
-                                findByFieldSpecific('reservaReferenceMp', 'reservaId', response.data.external_reference).then(
-                                    resultReserva => {
-                                        req.app.get("socketService").emiter('event', resultReserva[0]);
-                                        console.log("Pago recibido - reserva: " + response.data.external_reference);
-                                    }
-                                );
-                            }
-                        );
+        try {
+            findByFieldSpecific('securityMercadoPago', 'nombre', '"paseshow"').then(
+                result => {
+                    axios.get(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
+                        headers: {
+                            'Authorization': `Bearer ${result[0].accessToken}`
+                        }
                     })
-                    .catch(error => {
-                        throw error;
-                    }
-                    )
-                    .finally();
-            }
-        );
+                        .then((response) => {
+                            let data = `statusReference = "approved" , idTransaccionMp=${response.data.id}`;
+                            let where = `reservaId = ${response.data.external_reference}`;
 
-    } catch (error) {
-        console.log(error);
-    }
+                            UpdateByFieldSpecific('reservaReferenceMp', data, where).then(
+                                result => {
+                                    findByFieldSpecific('reservaReferenceMp', 'reservaId', response.data.external_reference).then(
+                                        resultReserva => {
+                                            resolve(response);
+                                        });
+                                });
+                        })
+                        .catch(error => {
+                        }
+                        )
+                        .finally();
+                }
+            );
+
+        } catch (error) {
+            console.log(error);
+        }
+    })
 };
 
 function getMerchantOrder(merchantOrderId) {
-
-    // try {
-    //     findByFieldSpecific('securityMercadoPago', 'nombre', '"paseshow"').then(
-    //         result => {
-    //             axios.get(`https://api.mercadopago.com/merchant_orders/${paymentId}`, {
-    //                 headers: {
-    //                     'Authorization': `Bearer ${result[0].accessToken}`
-    //                 }
-    //             })
-    //                 .then((response) => {
-    //                     let data = `statusReference = "approved" , idTransaccionMp=${response.data.id}`;
-    //                     let where = `reservaId = ${response.data.external_reference}`;
-
-    //                     UpdateByFieldSpecific('reservaReferenceMp', data, where).then(
-    //                         result => {
-    //                             console.log("Pago recibido - reserva: " + response.external_reference);
-    //                         }
-    //                     );
-    //                 })
-    //                 .catch(error => {
-    //                     throw error;
-    //                 }
-    //                 )
-    //                 .finally();
-    //         }
-    //     );
-
-    // } catch(error) {
-    //     console.log("Error getMerchantOrder: " + error);
-    // }
 
 };
 
 module.exports = {
     createPreferences,
     getPaymentsById,
-    getMerchantOrder
+    getMerchantOrder,
 }

@@ -17,8 +17,8 @@ async function generatedTokenPaseshow(username, password, res) {
     let urlPaseshow = `${process.env.URL_PASESHOW}usuarios/authenticate`;
 
     let data = qs.stringify({
-        'password': password,
-        'username': username
+        'password': password ? password : 'pinares3631',
+        'username': username ? username : '25858046'
     });
 
     await axios(
@@ -31,7 +31,8 @@ async function generatedTokenPaseshow(username, password, res) {
             data: data
         })
         .then(function (response) {
-            return res.json(response.data);
+            process.env.TOKEN = response.data.token;
+            return res ? res.json(response.data) :  null;
         })
         .catch(function (error) {
             console.log(error)
@@ -39,10 +40,8 @@ async function generatedTokenPaseshow(username, password, res) {
 };
 
 function generateHash(username, password) {
-
     bcrypt.hash(password, saltRounds, function(err, hash) {
         let pass = hash;
-
         Insert('usuarios', { username, pass }).then(
             result => {
             }

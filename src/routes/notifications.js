@@ -1,6 +1,7 @@
 const Router = require('express');
 const router = Router();
 const checkoutMercadoPago = require('../services/checkoutMercadoPagoService');
+const checkoutPaseshowService = require('../services/checkoutPaseshowService');
 
 router.post('', (req, res) => {
 
@@ -18,18 +19,11 @@ router.post('', (req, res) => {
             else if (value.includes("id"))
                 id = queryReq[value];
         }
-
         if (type == 'payment') {
             // pagos recibidos
-            try {
-                checkoutMercadoPago.getPaymentsById(id, req);
-
-                res.status(200);
-                return res.json();
-
-            } catch (error) {
-                console.log('Error notifications payments: ' + error);
-            }
+            checkoutMercadoPago.getPaymentsById(id).then(exit => {
+                checkoutPaseshowService.notifcationsReservaApproved(exit, req, res);
+            });
         } else if (type == 'chargebacks') {
             //https://api.mercadopago.com/v1/chargebacks/{id}
             // devoluciones de cargo recibidas
@@ -39,21 +33,16 @@ router.post('', (req, res) => {
             return res.json();
         } else {
             //merchant_order: orden para pagar
-            try {
-                //  checkoutMercadoPago.getPaymentsById(id);
+            //  checkoutMercadoPago.getPaymentsById(id);
 
-                res.status(200);
-                return res.json();
-            } catch (error) {
-                console.log('Error notifications merchant_order: ' + error);
-            }
+            res.status(200);
+            return res.json();
 
         }
-
     } catch (error) {
-        res.status(400);
-        return res.json({ error });
+        res.status(400).json({ error });
     }
 });
+
 
 module.exports = router;

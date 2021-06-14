@@ -6,7 +6,7 @@ const checkoutPaseshowService = require('../services/checkoutPaseshowService');
 router.post('/create_preferences/:eventoId', (req, res) => {
     
     try  {
-        checkoutPaseshowService.validReservaId(req.query.token, req.body.reservaId.toString(), req.params.eventoId, res, req);
+        checkoutPaseshowService.validReservaId(req.body.reservaId.toString(), req.params.eventoId, res, req);
     } catch(e) {
         res.status(500);
         res.json({ error: 'server' });

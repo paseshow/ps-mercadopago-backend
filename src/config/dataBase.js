@@ -12,9 +12,9 @@ function connect() {
 
 function Insert(table, objectData) {
 
-    return new Promise ( (resolve, reject) => {
+    return new Promise((resolve, reject) => {
         const connecting = connect();
-        
+
         connecting.query(`INSERT INTO ${table} SET?`, objectData, (error, result) => {
             if (error) console.log(`ERROR : Insert data into table:${table}, ${error}`);
             else {
@@ -25,9 +25,9 @@ function Insert(table, objectData) {
     });
 };
 
-function Update(table, objectData,id) {
+function Update(table, objectData, id) {
 
-    return new Promise ( (resolve, reject) => {
+    return new Promise((resolve, reject) => {
         const connecting = connect();
 
         connecting.query(`UPDATE ${table} SET ${objectData} where id = ${id}`, (error, result) => {
@@ -40,9 +40,9 @@ function Update(table, objectData,id) {
     });
 };
 
-function UpdateByFieldSpecific(table, objectData,id) {
+function UpdateByFieldSpecific(table, objectData, id) {
 
-    return new Promise ( (resolve, reject) => {
+    return new Promise((resolve, reject) => {
         const connecting = connect();
 
         connecting.query(`UPDATE ${table} SET ${objectData} where ${id}`, (error, result) => {
@@ -57,13 +57,13 @@ function UpdateByFieldSpecific(table, objectData,id) {
 
 function findAll(table, limit) {
 
-    return new Promise( (resolve,reject) => {
+    return new Promise((resolve, reject) => {
 
         const connecting = connect();
-        
+
         connecting.query(`SELECT * FROM ${table} ${limit ? `order by id desc LIMIT ${limit}` : ''}`, (error, result) => {
-            if(error)  console.log(error); 
-            else  resolve(result);
+            if (error) console.log(error);
+            else resolve(result);
         });
     });
 };
@@ -73,8 +73,8 @@ function findByFieldSpecific(table, field, value) {
     return new Promise((resolve, reject) => {
         const connecting = connect();
         connecting.query(`SELECT * FROM ${table} WHERE ${field} = ${value};`, (error, result) => {
-            
-            if (error)  console.log(error); 
+
+            if (error) console.log(error);
             else resolve(result);
         });
     });
@@ -85,10 +85,27 @@ function findByWhere(table, where) {
         const connecting = connect();
 
         connecting.query(`SELECT * FROM ${table} where ${where}`, (error, result) => {
-            if (error)  console.log(error); 
+            if (error) console.log(error);
             else resolve(result);
         });
     })
+};
+
+function UpdateEstadoReserva(reservaId) {
+    return new Promise((resolve, reject) => {
+        const connecting = connect();
+        console.log(reservaId);
+        connecting.query(`UPDATE reservas SET estado='E' WHERE id =` + reservaId.toString(), (error, result) => {
+            if (error) console.log(error);
+            else {
+                findByFieldSpecific('reservaReferenceMp', 'reservaId', reservaId).then(
+                    result => {
+                        resolve(result[0]);
+                    }
+                )
+            }
+        });
+    });
 };
 
 module.exports = {
@@ -98,5 +115,6 @@ module.exports = {
     UpdateByFieldSpecific,
     findAll,
     findByFieldSpecific,
-    findByWhere
+    findByWhere,
+    UpdateEstadoReserva
 };

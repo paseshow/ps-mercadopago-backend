@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const { appConfig } = require('./src/config/configServer');
+const authenticationServicePaseshow = require('./src/services/authenticationService');
 
 // LOG'S  ------------------------------------------------------
 const fs = require('fs');
@@ -11,7 +12,7 @@ const util = require('util');
 const logFile = fs.createWriteStream(__dirname + '/node.log', { flags: 'w' });
 const logStdout = process.stdout;
 
-console.log = function(d) {
+console.log = function (d) {
     //console.log(d);
     logFile.write(util.format(d) + '\n');
     logStdout.write(util.format(d) + '\n');
@@ -60,11 +61,9 @@ passport.use(new PassportLocal(function (username, password, done) {
     findByFieldSpecific('usuarios', 'username', username).then(
         resultFind => {
             bcrypt.compare(password, resultFind[0].pass, function (err, result) {
-
+                
                 if (result) return done(null, { id: resultFind[0].id, name: resultFind[0].username.toString() });
-
                 done(null, false);
-
             });
         }
     );
@@ -96,6 +95,8 @@ const server = require('http').Server(app);
 
 server.listen(appConfig.port, () => {
     if (isTest) process.env.URL_PASESHOW = 'https://www.paseshow.com.ar/test/';
+
+    authenticationServicePaseshow.generatedTokenPaseshow(null, null, null);
 
     console.log(`${isTest ? 'TEST' : 'PROD'} - Server run port: ${appConfig.port}`)
 });
