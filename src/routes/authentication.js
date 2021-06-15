@@ -1,12 +1,16 @@
 const Router = require('express');
 const router = Router();
 const passport = require('passport');
+const methodsDataBase = require('../config/dataBase');
 
 const { generatedTokenPaseshow, generateHash } = require('../services/authenticationService');
 
 router.post('/', passport.authenticate('local', { failureRedirect: '/error' }),
     function (req, res) {
-        generatedTokenPaseshow(req.body.username, req.body.password, res);
+        methodsDataBase.findByFieldSpecific('usuarios', 'username', req.body.username).then(
+            result => {
+                generatedTokenPaseshow(req.body.username, req.body.password, res, result[0].id);
+            });
     });
 
 router.post('/create', (req, res) => {
@@ -21,7 +25,7 @@ router.post('/create', (req, res) => {
 });
 
 router.get('/server', (req, res) => {
-    generatedTokenPaseshow(null, null, null);
+    generatedTokenPaseshow(null, null, res, null);
 });
 
 module.exports = router;

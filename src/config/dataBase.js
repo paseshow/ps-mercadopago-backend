@@ -1,4 +1,5 @@
 const mysql = require('mysql');
+const { rescheduleJob } = require('node-schedule');
 const { dataBase } = require('./configServer');
 
 function connect() {
@@ -94,7 +95,6 @@ function findByWhere(table, where) {
 function UpdateEstadoReserva(reservaId) {
     return new Promise((resolve, reject) => {
         const connecting = connect();
-        console.log(reservaId);
         connecting.query(`UPDATE reservas SET estado='E' WHERE id =` + reservaId.toString(), (error, result) => {
             if (error) console.log(error);
             else {
@@ -108,6 +108,17 @@ function UpdateEstadoReserva(reservaId) {
     });
 };
 
+function UpdateData(table, set, where) {
+
+    return new Promise((resolve, reject) => {
+        const connecting = connect();
+        connecting.query(`UPDATE ${table} SET ${set} WHERE ${where}`, (error , result) => {
+            if(error) console.log(error);
+            resolve(result);
+        });
+    });
+};
+
 module.exports = {
     connect,
     Insert,
@@ -116,5 +127,6 @@ module.exports = {
     findAll,
     findByFieldSpecific,
     findByWhere,
-    UpdateEstadoReserva
+    UpdateEstadoReserva,
+    UpdateData
 };

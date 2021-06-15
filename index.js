@@ -38,6 +38,7 @@ const routerSecurityMp = require('./src/routes/securityMp');
 const routerNotificactionsMp = require('./src/routes/notifications');
 const routerReservas = require('./src/routes/reservas');
 const routerAuthentication = require('./src/routes/authentication');
+const routerRefunds = require('./src/routes/refunds');
 // ------------------------------------------------------------------
 
 
@@ -88,6 +89,7 @@ app.use('/security', routerSecurityMp);
 app.use('/notifications', routerNotificactionsMp);
 app.use('/reservas', routerReservas);
 app.use('/authentication', routerAuthentication);
+app.use('/refunds', routerRefunds);
 app.use('/', express.static('./src/views'));
 
 

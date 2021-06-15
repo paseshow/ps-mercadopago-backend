@@ -98,8 +98,8 @@ async function validReservaId(reservaId, eventoId, res, req) {
 };
 
 // OBTENEMOS LOS EVENTOS DEL BACK DE PASESHOW
-async function getEventoes(res) {
-    await axios.get(process.env.URL_PASESHOW + `eventoes?token=${process.env.TOKEN}`)
+async function getEventoes(token,res) {
+    await axios.get(process.env.URL_PASESHOW + `eventoes?token=${token}`)
         .then(
             function (response) {
                 return res.json(response.data);

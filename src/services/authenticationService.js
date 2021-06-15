@@ -12,7 +12,7 @@ function validAuthentication(req, res, next) {
     res.redirect('authentication');
 };
 
-async function generatedTokenPaseshow(username, password, res) {
+async function generatedTokenPaseshow(username, password, res, idUser) {
 
     let urlPaseshow = `${process.env.URL_PASESHOW}usuarios/authenticate`;
 
@@ -32,7 +32,10 @@ async function generatedTokenPaseshow(username, password, res) {
         })
         .then(function (response) {
             process.env.TOKEN = response.data.token;
-            return res ? res.json(response.data) :  null;
+            return res ? res.json({
+                token: response.data.token,
+                idUser: idUser
+            }) : null;
         })
         .catch(function (error) {
             console.log(error)
@@ -40,7 +43,7 @@ async function generatedTokenPaseshow(username, password, res) {
 };
 
 function generateHash(username, password) {
-    bcrypt.hash(password, saltRounds, function(err, hash) {
+    bcrypt.hash(password, saltRounds, function (err, hash) {
         let pass = hash;
         Insert('usuarios', { username, pass }).then(
             result => {

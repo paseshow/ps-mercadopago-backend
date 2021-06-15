@@ -2,6 +2,16 @@ create database if not exists mercadopagopaseshow;
 
 use mercadopagopaseshow;
 
+create table if not exists reservaReferenceMp (
+    id int(11) not null auto_increment primary key,
+    reservaId int(11) not null unique,
+    referenceId varchar(100) not null unique,
+    clientMpId bigint not null,
+    collectorId bigint not null,
+    statusReference varchar(10) default "pending",
+    idTransaccionMp bigint default null
+);
+
 create table if not exists reservas (
     id int(11) not null primary key,
     tipo char(3) not null,
@@ -29,17 +39,6 @@ create table if not exists reservas (
 );
 
 
-create table if not exists reservaReferenceMp (
-    id int(11) not null auto_increment primary key,
-    reservaId int(11) not null unique,
-    referenceId varchar(100) not null unique,
-    clientMpId bigint not null,
-    collectorId bigint not null,
-    statusReference varchar(10) default "pending",
-    idTransaccionMp bigint default null
-);
-
-
 create table if not exists securityMercadoPago (
 	id int(11) not null auto_increment primary key,
 	accessToken varchar(255) not null,
@@ -53,7 +52,18 @@ create table if not exists securityMercadoPago (
 create table if not exists usuarios (
 	id int(11) not null auto_increment primary key,
 	username int(11) not null,
-    pass varchar(100) not null
+    pass varchar(100) not null,
+	nameLastName varchar(150) not null
+);
+
+create table if not exists devoluciones (
+	id int(11) not null auto_increment primary key,
+    reservaId int(11) not null,
+    motivo varchar(150) not null,
+    fechaDevolucion bigint not null,
+    usuarioEncargadoId int(11) not null,
+    FOREIGN KEY ( reservaId ) REFERENCES reservas (id),
+    FOREIGN KEY ( usuarioEncargadoId ) REFERENCES usuarios (id)
 );
 
 insert into `usuarios`(username,pass) values (25858046, 'miguel01');
