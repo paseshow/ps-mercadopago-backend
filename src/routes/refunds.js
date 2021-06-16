@@ -30,7 +30,7 @@ router.post('/', (req, res) => {
             methodsDataBases.findByFieldSpecific('securityMercadoPago', 'userIdMp', resultQueryReference[0].collectorId).then(
                 resultFindSecurity => {
                     mercadopago.configure({
-                        access_token: resultFindSecurity[0].accessToken
+                        access_token: resultFindSecurity[resultFindSecurity.length -1 ].accessToken
                     });
 
                     mercadopago.payment.refund(jsonRequest.idTransaccion)
@@ -97,7 +97,6 @@ router.post('/partial', (req, res) => {
 
                     mercadopago.payment.refundPartial({ payment_id: jsonRequest.idTransaccion, amount: Number(jsonRequest.montoParcial) })
                         .then(function (response) {
-                            console.log(response);
                             methodsDataBases.findByFieldSpecific('reservas', 'id', resultQueryReference[0].reservaId)
                                 .then(resultFindReserva => {
                                     let set = `importeTotal = ${resultFindReserva[0].importeTotal - jsonRequest.montoParcial}`;
@@ -113,7 +112,7 @@ router.post('/partial', (req, res) => {
 
                                             methodsDataBases.Insert('devoluciones', { reservaId, motivo, fechaDevolucion, usuarioEncargadoId, monto }).then(resultInsertDevolucion => {
 
-                                                console.log("DEVOLUCION PARCIAL EXITOSA, RESERVA: " + responseFindById.body.external_reference);
+                                                console.log("DEVOLUCION PARCIAL EXITOSA, RESERVA: " + resultQueryReference[0].reservaId);
                                                 res.status(200);
                                                 return res.json();
                                             });
