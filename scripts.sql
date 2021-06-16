@@ -52,8 +52,7 @@ create table if not exists securityMercadoPago (
 create table if not exists usuarios (
 	id int(11) not null auto_increment primary key,
 	username int(11) not null,
-    pass varchar(100) not null,
-	nameLastName varchar(150) not null
+    pass varchar(100) not null
 );
 
 create table if not exists devoluciones (
@@ -65,6 +64,9 @@ create table if not exists devoluciones (
     FOREIGN KEY ( reservaId ) REFERENCES reservas (id),
     FOREIGN KEY ( usuarioEncargadoId ) REFERENCES usuarios (id)
 );
+
+alter table usuarios add column `nameLastName` varchar(150) default null after `pass`;
+alter table devoluciones add column `monto` decimal(10,2) default null after `usuarioEncargadoId`;
 
 insert into `usuarios`(username,pass) values (25858046, 'miguel01');
 SELECT * FROM reservas where id = 121980 and clienteDni = 40108490;
