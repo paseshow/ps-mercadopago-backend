@@ -99,7 +99,8 @@ router.post('/partial', (req, res) => {
                         .then(function (response) {
                             methodsDataBases.findByFieldSpecific('reservas', 'id', resultQueryReference[0].reservaId)
                                 .then(resultFindReserva => {
-                                    let set = `importeTotal = ${resultFindReserva[0].importeTotal - jsonRequest.montoParcial}`;
+                                    let montoUpdate = resultFindReserva[0].importeTotal - jsonRequest.montoParcial;
+                                    let set = montoUpdate != 0 ? `importeTotal = ${montoUpdate}` : `estado='A'`;
                                     let where = `id = ${resultQueryReference[0].reservaId}`;
                                     methodsDataBases.UpdateData('reservas', set, where).then(
                                         resultUpdate => {
