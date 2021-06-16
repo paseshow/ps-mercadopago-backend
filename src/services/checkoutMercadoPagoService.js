@@ -1,7 +1,7 @@
 const axios = require('axios');
 const { findByFieldSpecific, UpdateByFieldSpecific, UpdateEstadoReserva } = require('../config/dataBase');
 
-function createPreferences(requestBody) {
+function createPreferences(requestBody, nombreCuenta) {
 
     let preferences = {
         items: [
@@ -34,7 +34,7 @@ function createPreferences(requestBody) {
                 "zip_code": requestBody.clienteId.cp
             }
         },
-        notification_url: "https://api2.test.mercadopago.paseshow.com.ar/notifications", // notificaiones para estados de los procesos
+        notification_url: "https://api2.test.mercadopago.paseshow.com.ar/notifications/" + nombreCuenta, // notificaiones para estados de los procesos
         statement_descriptor: "PaseShow", //descripcion que aparecera en el resumen de tarjeta del comprador
         external_reference: requestBody.id.toString(),
     };
