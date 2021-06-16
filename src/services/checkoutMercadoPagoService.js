@@ -42,16 +42,16 @@ function createPreferences(requestBody) {
     return preferences;
 }
 
-function getPaymentsById(paymentId) {
+function getPaymentsById(paymentId, nombreCuenta) {
 
     return new Promise((resolve, reject) => {
 
         try {
-            findByFieldSpecific('securityMercadoPago', 'nombre', '"paseshow"').then(
+            findByFieldSpecific('securityMercadoPago', 'nombre', `"${nombreCuenta}"`).then(
                 result => {
                     axios.get(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
                         headers: {
-                            'Authorization': `Bearer ${result[0].accessToken}`
+                            'Authorization': `Bearer ${result[result.length -1].accessToken}`
                         }
                     })
                         .then((response) => {
@@ -67,8 +67,8 @@ function getPaymentsById(paymentId) {
                                 });
                         })
                         .catch(error => {
-                        }
-                        )
+                            console.log(error);
+                        })
                         .finally();
                 }
             );

@@ -3,7 +3,7 @@ const router = Router();
 const checkoutMercadoPago = require('../services/checkoutMercadoPagoService');
 const checkoutPaseshowService = require('../services/checkoutPaseshowService');
 
-router.post('', (req, res) => {
+router.post('/:nombreCuenta', (req, res) => {
 
     try {
 
@@ -21,9 +21,12 @@ router.post('', (req, res) => {
         }
         if (type == 'payment') {
             // pagos recibidos
-            checkoutMercadoPago.getPaymentsById(id).then(exit => {
+            checkoutMercadoPago.getPaymentsById(id, req.params.nombreCuenta).then(exit => {
                 checkoutPaseshowService.notifcationsReservaApproved(exit, req, res);
             });
+
+            res.status(200);
+            return res.json();
         } else if (type == 'chargebacks') {
             //https://api.mercadopago.com/v1/chargebacks/{id}
             // devoluciones de cargo recibidas
