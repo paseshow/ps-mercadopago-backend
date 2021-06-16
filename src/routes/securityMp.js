@@ -28,14 +28,14 @@ router.put((''), (req, res) => {
                 if (result.affectedRows > 0)
                     return res.json('Exits');
             })
+        } else {
+            Insert('securityMercadoPago', {
+                accessToken, publicKey, userIdMp, nombreCuenta, nombre, eventoId
+            }).then(result => {
+                res.status(200);
+                return res.json({ id: result.insertId });
+            })
         }
-
-        Insert('securityMercadoPago', {
-            accessToken, publicKey, userIdMp, nombreCuenta, nombre, eventoId
-        }).then(result => {
-            res.status(200);
-            return res.json({ id: result.insertId });
-        })
 
     } catch (error) {
         return res.json({ error: error });
