@@ -22,7 +22,7 @@ async function validReservaId(reservaId, eventoId, res, req) {
                                         if (values.length > 0) {
                                             mercadopago.configurations.setAccessToken(values[values.length - 1].accessToken);
 
-                                            mercadopago.preferences.create(checkoutMercadoPago.createPreferences(reservaById, values[values.length - 1].length -1).nombreCuenta)
+                                            mercadopago.preferences.create(checkoutMercadoPago.createPreferences(reservaById, values[values.length - 1].nombreCuenta))
                                                 .then(function (response) {
                                                     let reservaId = reservaById.id;
                                                     let referenceId = response.body.id;
