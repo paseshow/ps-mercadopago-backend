@@ -21,7 +21,7 @@ router.post('/:nombreCuenta', (req, res) => {
         }
         if (type == 'payment') {
             // pagos recibidos
-            checkoutMercadoPago.getPaymentsById(id, req.params.nombreCuenta).then(exit => {
+            checkoutMercadoPago.getPaymentsById(id, req).then(exit => {
 
                 if(exit.data.status == "approved") {
                     checkoutPaseshowService.notifcationsReservaApproved(exit, req, res);

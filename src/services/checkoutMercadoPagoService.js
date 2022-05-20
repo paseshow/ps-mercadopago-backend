@@ -42,12 +42,12 @@ function createPreferences(requestBody, nombreCuenta) {
     return preferences;
 }
 
-function getPaymentsById(paymentId, nombreCuenta) {
+function getPaymentsById(paymentId, req) {
 
     return new Promise((resolve, reject) => {
 
         try {
-            findByFieldSpecific('securityMercadoPago', 'nombreCuenta', `"${nombreCuenta}"`).then(
+            findByFieldSpecific('securityMercadoPago', 'nombreCuenta', `"${req.params.nombreCuenta}"`).then(
                 result => {
                     axios.get(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
                         headers: {
@@ -65,7 +65,14 @@ function getPaymentsById(paymentId, nombreCuenta) {
                                         resultReserva => {
                                             resolve(response);
                                         });
-                                });                                
+                                });
+
+                            UpdateEstadoReserva(response.data.external_reference).then(
+                              resultUpdate => {
+                                  req.app.get("socketService").emiter('event', resultUpdate);
+                              }).catch(error => {
+                                console.log("Error :" + error);
+                              });
                         })
                         .catch(error => {
                             console.log(error);
