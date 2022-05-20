@@ -51,5 +51,23 @@ router.post('/:nombreCuenta', (req, res) => {
     }
 });
 
+router.get('/exit', (req, res) => {
+    return res.writeHead(301, {
+        Location: `${process.env.URL_PASESHOW}` + '#/pago-exito'
+    }).end();
+});
+
+router.get('/fail', (req, res) => {
+    return res.writeHead(301, {
+        Location: `${process.env.URL_PASESHOW}` + '#/pago-error'
+    }).end();
+});
+
+router.get('/pending', (req, res) => {
+    return  res.writeHead(301, {
+        Location: `${process.env.URL_PASESHOW}#/pago-error`
+    }).end();
+});
+
 
 module.exports = router;
