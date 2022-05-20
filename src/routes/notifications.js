@@ -20,7 +20,7 @@ router.post('/:nombreCuenta', (req, res) => {
                 id = queryReq[value];
         }
         if (type == 'payment') {
-            console.log("---------- id:", id);
+            console.log("---------- id:", queryReq);
             // pagos recibidos
             checkoutMercadoPago.getPaymentsById(id, req).then(exit => {
 
