@@ -55,7 +55,9 @@ function getPaymentsById(paymentId, req) {
                         }
                     })
                         .then((response) => {
-                               console.log(`------- payments: '${response.data.toString()}'`); 
+                               console.log(`------- status: '${response.data.status}'`);
+                               console.log(`------- id: '${response.data.id}'`);
+                               console.log(`------- reserva id: '${response.data.external_reference}'`);
                             let data = `statusReference = '${response.data.status}' , idTransaccionMp=${response.data.id}`;
                             let where = `reservaId = ${response.data.external_reference}`;
 
