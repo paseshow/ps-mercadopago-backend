@@ -4,6 +4,7 @@ const { findByFieldSpecific, UpdateByFieldSpecific, UpdateEstadoReserva } = requ
 function createPreferences(requestBody, nombreCuenta) {
 
     let preferences = {
+        auto_return: "https://api2.test.mercadopago.paseshow.com.ar/notifications/exit",
         items: [
             {
                 title: 'PaseShow',
