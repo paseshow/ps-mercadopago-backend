@@ -39,7 +39,7 @@ async function validReservaId(reservaId, eventoId, res, req) {
                                                         let importeTotal = reservaById.importeTotal;
                                                         let importeTotalNeto = reservaById.importeTotalNeto;
                                                         let serviceChargeTotal = reservaById.serviceChargeTotal;
-                                                        let estado = reservaById.estado;
+                                                        let estado = "P";
                                                         let boleteria = reservaById.boleteria;
                                                         let fechaReserva = +reservaById.fechaReserva;
                                                         let fechaFacturacion = reservaById.fechaFacturacion;
@@ -131,7 +131,7 @@ function notifcationsReservaApproved(reservaId, req, res) {
                 },
                 data: data
             }).then(function (responseAxios) {
-                UpdateEstadoReserva(result[0].id).then(
+                UpdateEstadoReserva(result[0].id, 'E').then(
                     resultUpdate => {
                         req.app.get("socketService").emiter('event', resultUpdate);
                         console.log("Pago recibido - reserva: " + result[0].id);

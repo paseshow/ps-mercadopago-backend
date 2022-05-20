@@ -66,8 +66,16 @@ function getPaymentsById(paymentId, req) {
                                             resolve(response);
                                         });
                                 });
+                            
 
-                            UpdateEstadoReserva(response.data.external_reference).then(
+                            let estado = 'P'; 
+                            if(response.data.status == "approved") {
+                                estado = 'E';
+                            } else if(response.data.status == "rejected") {
+                                estado = 'R';
+                            }
+
+                            UpdateEstadoReserva(response.data.external_reference, estado).then(
                               resultUpdate => {
                                   req.app.get("socketService").emiter('event', resultUpdate);
                               }).catch(error => {
