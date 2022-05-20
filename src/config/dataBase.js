@@ -95,7 +95,7 @@ function findByWhere(table, where) {
 function UpdateEstadoReserva(reservaId, estado) {
     return new Promise((resolve, reject) => {
         const connecting = connect();
-        connecting.query(`UPDATE reservas SET estado=${estado} WHERE id =` + reservaId.toString(), (error, result) => {
+        connecting.query(`UPDATE reservas SET estado='${estado}' WHERE id =` + reservaId.toString(), (error, result) => {
             if (error) console.log(error);
             else {
                 findByFieldSpecific('reservaReferenceMp', 'reservaId', reservaId).then(
