@@ -20,10 +20,11 @@ router.post('/:nombreCuenta', (req, res) => {
                 id = queryReq[value];
         }
         if (type == 'payment') {
-            console.log("---------- id:", queryReq.toString());
+            console.log(`---------- id: '${queryReq}'`);
             // pagos recibidos
             checkoutMercadoPago.getPaymentsById(id, req).then(exit => {
 
+                console.log(`---------- exit: '${exit}'`);
                 if(exit.data.status == "approved") {
                     checkoutPaseshowService.notifcationsReservaApproved(exit, req, res);
                 }
