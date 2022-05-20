@@ -55,9 +55,7 @@ function getPaymentsById(paymentId, req) {
                         }
                     })
                         .then((response) => {
-                               console.log(`------- payents: '${paymentId}'`);
-                               console.log(`------- id: '${response.data.id}'`);
-                               console.log(`------- reserva id: '${response.data.external_reference}'`);
+                            console.log(`------- payents: '${paymentId}'`);
                             let data = `statusReference = '${response.data.status}' , idTransaccionMp=${response.data.id}`;
                             let where = `reservaId = ${response.data.external_reference}`;
                             
@@ -77,7 +75,6 @@ function getPaymentsById(paymentId, req) {
                                 estado = 'R';
                             }
 
-                            console.log(`------- estado: '${estado}'`);
                             UpdateEstadoReserva(response.data.external_reference, estado).then(
                               resultUpdate => {
                                   req.app.get("socketService").emiter('event', resultUpdate);
