@@ -55,7 +55,8 @@ function getPaymentsById(paymentId, nombreCuenta) {
                         }
                     })
                         .then((response) => {
-                            let data = `statusReference = "approved" , idTransaccionMp=${response.data.id}`;
+
+                            let data = `statusReference = '${response.data.status}' , idTransaccionMp=${response.data.id}`;
                             let where = `reservaId = ${response.data.external_reference}`;
 
                             UpdateByFieldSpecific('reservaReferenceMp', data, where).then(
@@ -64,7 +65,7 @@ function getPaymentsById(paymentId, nombreCuenta) {
                                         resultReserva => {
                                             resolve(response);
                                         });
-                                });
+                                });                                
                         })
                         .catch(error => {
                             console.log(error);
