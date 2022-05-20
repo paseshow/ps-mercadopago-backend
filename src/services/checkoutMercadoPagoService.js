@@ -4,7 +4,7 @@ const { findByFieldSpecific, UpdateByFieldSpecific, UpdateEstadoReserva } = requ
 function createPreferences(requestBody, nombreCuenta) {
 
     let preferences = {
-        auto_return: "https://api2.test.mercadopago.paseshow.com.ar/notifications/exit",
+        // auto_return: "https://api2.test.mercadopago.paseshow.com.ar/notifications/exit",
         items: [
             {
                 title: 'PaseShow',
@@ -13,7 +13,7 @@ function createPreferences(requestBody, nombreCuenta) {
             }
         ],
         back_urls: {
-            "sucesss": "https://api2.test.mercadopago.paseshow.com.ar/notifications/exit",
+            "success": "https://api2.test.mercadopago.paseshow.com.ar/notifications/exit",
             "failure": "https://api2.test.mercadopago.paseshow.com.ar/notifications/fail",
             "pending": "https://api2.test.mercadopago.paseshow.com.ar/notifications/pending",
             // "success": "https://www.paseshow.com.ar/test/#/operacion-mercado-pago-info",
