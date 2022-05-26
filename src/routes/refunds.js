@@ -23,26 +23,40 @@ router.post('/cancelled/:paymentId', (req, res) => {
 
 router.post('/', (req, res) => {
     let jsonRequest = req.body.body;
+
+    console.log("refounds/ (POST) INIT");
+
     methodsDataBases.findByFieldSpecific('reservaReferenceMp', 'idTransaccionMp', jsonRequest.idTransaccion).then(
         resultQueryReference => {
+            
             if (!resultQueryReference) return res.status(500);
+
+            console.log('methodsDataBases.findByFieldSpecific SUCCESS: ', resultQueryReference[0]);
 
             methodsDataBases.findByFieldSpecific('securityMercadoPago', 'userIdMp', resultQueryReference[0].collectorId).then(
                 resultFindSecurity => {
+                    console.log('methodsDataBases.findByFieldSpecific SUCCESS: ', resultFindSecurity[resultFindSecurity.length -1 ]);
+
                     mercadopago.configure({
                         access_token: resultFindSecurity[resultFindSecurity.length -1 ].accessToken
                     });
 
                     mercadopago.payment.refund(jsonRequest.idTransaccion)
                         .then(response => {
+                            console.log('mercadopago.payment.refund SUCCESS: ', jsonRequest.idTransaccion);
+
                             let set = `statusReference = "refunded"`;
                             let where = `idTransaccionMp = ${jsonRequest.idTransaccion}`;
 
                             methodsDataBases.UpdateData('reservaReferenceMp', set, where).then(
                                 resultUpdateReference => {
+                                    console.log('methodsDataBases.UpdateData SUCCESS: ', resultQueryReference[0].reservaId);
+                                    
                                     set = `estado='A'`;
                                     methodsDataBases.Update('reservas', set, resultQueryReference[0].reservaId).then(
                                         resultUpdataReserva => {
+                                        console.log('methodsDataBases.Update SUCCESS: ', resultQueryReference[0].reservaId);
+
                                             let reservaId = resultQueryReference[0].reservaId;
                                             let fechaDevolucion = new Date().getTime();
                                             let usuarioEncargadoId = jsonRequest.idUser;
@@ -50,20 +64,21 @@ router.post('/', (req, res) => {
                                             let monto = jsonRequest.monto;
 
                                             methodsDataBases.Insert('devoluciones', { reservaId, motivo, fechaDevolucion, usuarioEncargadoId, monto }).then(resultInsertDevolucion => {
-
+                                                console.log('methodsDataBases.Insert SUCCESS: ', resultQueryReference[0].reservaId);
                                                 console.log("DEVOLUCION EXITOSA, RESERVA: " + resultQueryReference[0].reservaId);
+                                                console.log("refounds/ (POST) THEN END");
                                                 res.status(200);
                                                 res.json();
                                             });
                                         }
                                     )
                                 }).catch(error => {
-                                    console.log("methodsDataBases.UpdateData > ",error);
+                                    console.log("methodsDataBases.UpdateData ERROR: ",error);
                                     res.status(500);
                                     return res.json({});
                                 });
                         }).catch(error => {
-                            console.log("mercadopago.payment.refund > ", error);
+                            console.log("mercadopago.payment.refund ERROR: ", error);
                             res.status(500);
                             return res.json({});
                         });
