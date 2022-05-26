@@ -37,14 +37,14 @@ router.post('/', (req, res) => {
 
             methodsDataBases.findByFieldSpecific('securityMercadoPago', 'userIdMp', resultQueryReference[0].collectorId).then(
                 resultFindSecurity => {
-                    console.log('methodsDataBases.findByFieldSpecific securityMercadoPago SUCCESS: ', resultFindSecurity[resultFindSecurity.length -1 ].toString());
+                    console.log('methodsDataBases.findByFieldSpecific securityMercadoPago SUCCESS: ', rresultFindSecurity[resultFindSecurity.length -1 ].accessToken);
 
                     mercadopago.configure({
                         access_token: resultFindSecurity[resultFindSecurity.length -1 ].accessToken
                     });
 
                     let refund = {
-                        payment_id: 'payment_id'
+                        payment_id: jsonRequest.idTransaccion
                     };
                     mercadopago.refund.create(refund)
                         .then(response => {
