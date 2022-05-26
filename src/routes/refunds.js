@@ -33,11 +33,11 @@ router.post('/', (req, res) => {
             
             if (!resultQueryReference) return res.status(500);
 
-            console.log('methodsDataBases.findByFieldSpecific reservaReferenceMp SUCCESS: ', resultQueryReference[0].toString());
+            console.log('methodsDataBases.findByFieldSpecific reservaReferenceMp SUCCESS: ', resultQueryReference[0].collectorId.toString());
 
             methodsDataBases.findByFieldSpecific('securityMercadoPago', 'userIdMp', resultQueryReference[0].collectorId).then(
                 resultFindSecurity => {
-                    console.log('methodsDataBases.findByFieldSpecific securityMercadoPago SUCCESS: ', resultFindSecurity[resultFindSecurity.length -1 ].accessToken);
+                    console.log('methodsDataBases.findByFieldSpecific securityMercadoPago SUCCESS: ', resultFindSecurity[resultFindSecurity.length -1 ].accessToken.toString() );
 
                     mercadopago.configure({
                         access_token: resultFindSecurity[resultFindSecurity.length -1 ].accessToken
