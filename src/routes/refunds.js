@@ -43,7 +43,10 @@ router.post('/', (req, res) => {
                         access_token: resultFindSecurity[resultFindSecurity.length -1 ].accessToken
                     });
 
-                    mercadopago.payment.refund(jsonRequest.idTransaccion)
+                    let refund = {
+                        payment_id: 'payment_id'
+                    };
+                    mercadopago.refund.create(refund)
                         .then(response => {
                             console.log('mercadopago.payment.refund SUCCESS: ', jsonRequest.idTransaccion);
 
