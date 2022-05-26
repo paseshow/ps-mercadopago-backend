@@ -25,19 +25,20 @@ router.post('/cancelled/:paymentId', (req, res) => {
 router.post('/', (req, res) => {
     let jsonRequest = req.body.body;
 
-    console.log("refounds/ (POST) INIT");
-    console.log(jsonRequest.idTransaccion);
+    console.log("-------------- refounds/ (POST) INIT");
 
     methodsDataBases.findByFieldSpecific('reservaReferenceMp', 'idTransaccionMp', jsonRequest.idTransaccion).then(
         resultQueryReference => {
             
             if (!resultQueryReference) return res.status(500);
 
-            console.log('methodsDataBases.findByFieldSpecific reservaReferenceMp SUCCESS: ', resultQueryReference[0].collectorId.toString());
+            console.log('methodsDataBases.findByFieldSpecific reservaReferenceMp SUCCESS: ' + resultQueryReference[0]);
 
-            methodsDataBases.findByFieldSpecific('securityMercadoPago', 'userIdMp', resultQueryReference[0].collectorId).then(
+            let where = `userIdMp = ${resultQueryReference[0].collectorId} AND eventoId = ${jsonRequest.eventoId}`;
+            // methodsDataBases.findByFieldSpecific('securityMercadoPago', 'userIdMp', resultQueryReference[0].collectorId)
+            methodsDataBases.findByWhere('securityMercadoPago', where).then(
                 resultFindSecurity => {
-                    console.log('methodsDataBases.findByFieldSpecific securityMercadoPago SUCCESS: ', resultFindSecurity[resultFindSecurity.length -1 ].accessToken.toString() );
+                    console.log('methodsDataBases.findByFieldSpecific securityMercadoPago SUCCESS: ' + resultFindSecurity[resultFindSecurity.length -1 ].toString() );
 
                     mercadopago.configure({
                         access_token: resultFindSecurity[resultFindSecurity.length -1 ].accessToken
@@ -46,7 +47,7 @@ router.post('/', (req, res) => {
                     let refund = {
                         payment_id: jsonRequest.idTransaccion
                     };
-                    mercadopago.refund.create(refund)
+                    mercadopago.payment.refund(jsonRequest.idTransaccion)
                         .then(response => {
                             console.log('mercadopago.payment.refund SUCCESS: ', jsonRequest.idTransaccion);
 
@@ -71,7 +72,7 @@ router.post('/', (req, res) => {
                                             methodsDataBases.Insert('devoluciones', { reservaId, motivo, fechaDevolucion, usuarioEncargadoId, monto }).then(resultInsertDevolucion => {
                                                 console.log('methodsDataBases.Insert SUCCESS: ', resultQueryReference[0].reservaId);
                                                 console.log("DEVOLUCION EXITOSA, RESERVA: " + resultQueryReference[0].reservaId);
-                                                console.log("refounds/ (POST) THEN END");
+                                                console.log("-------------- refounds/ (POST) THEN END");
                                                 res.status(200);
                                                 res.json();
                                             });
