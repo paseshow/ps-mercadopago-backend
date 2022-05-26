@@ -58,12 +58,12 @@ router.post('/', (req, res) => {
                                         }
                                     )
                                 }).catch(error => {
-                                    console.log(error);
+                                    console.log("methodsDataBases.UpdateData > ",error);
                                     res.status(500);
                                     return res.json({});
                                 });
                         }).catch(error => {
-                            console.log(error);
+                            console.log("mercadopago.payment.refund > ", error);
                             res.status(500);
                             return res.json({});
                         });
