@@ -9,21 +9,26 @@ async function validReservaId(reservaId, eventoId, res, req) {
     await axios.get(process.env.URL_PASESHOW + `/reservas/${reservaId}/full?token=${process.env.TOKEN}`)
         .then(function (response) {
             let reservaById = response.data;
+            console.log(`axion get /reservas/${reservaId}/full SUCCESS. `);
 
             if (reservaById) {
                 try {
                     findByFieldSpecific('reservaReferenceMp', 'reservaId', reservaById.id).then(
                         values => {
+                            console.log('methodsDataBases.findByFieldSpecific reservaReferenceMp SUCCESS.');
 
                             if (values.length == "0") {
                                 findByFieldSpecific('securityMercadoPago', 'eventoId', eventoId).then(
                                     values => {
+                                        console.log('methodsDataBases.securityMercadoPago reservaReferenceMp SUCCESS.');
 
                                         if (values.length > 0) {
                                             mercadopago.configurations.setAccessToken(values[values.length - 1].accessToken);
 
                                             mercadopago.preferences.create(checkoutMercadoPago.createPreferences(reservaById, values[values.length - 1].nombreCuenta))
                                                 .then(function (response) {
+                                                    console.log('mercadopago.preferences.create SUCCESS.');
+
                                                     let reservaId = reservaById.id;
                                                     let referenceId = response.body.id;
                                                     let clientMpId = response.body.client_id;
@@ -32,6 +37,8 @@ async function validReservaId(reservaId, eventoId, res, req) {
 
                                                     let data = { reservaId, referenceId, clientMpId, collectorId, statusReference };
                                                     Insert('reservaReferenceMp', data).then(result => {
+                                                        console.log('insert reservaReferenceMp SUCCESS.');
+                                                        
                                                         req.app.get("socketService").emiter('event', data);
 
                                                         let id = reservaById.id;
@@ -65,9 +72,11 @@ async function validReservaId(reservaId, eventoId, res, req) {
                                                                 fechaFacturacion, turnoId, clienteDni, clienteNombre, clienteEmail, reservaPreferenceMpId, eventoId, eventoNombre, ubicacionEventoId,
                                                                 ubicacionEventoEstado, ubicacionEventoFechaIngreso, sectorEventoDescripcion, sectorEventoFechaFuncion, descuentoSectorDescripcion
                                                             }).then(result => {
+                                                                console.log('insert reservaReferenceMp SUCCESS.');
                                                             })
                                                         }
                                                         console.log(`created reference of reserva_id: ${reservaById.id}`);
+                                                        console.log("------------- The end path POST: checkout/create_preferences/" + eventoId);
                                                         return res.json(
                                                             {
                                                                 id: response.body.id,
@@ -102,9 +111,11 @@ async function getEventoes(token,res) {
     await axios.get(process.env.URL_PASESHOW + `eventoes?token=${token}`)
         .then(
             function (response) {
+                console.log("api axios get: eventoes SUCESS.");
                 return res.json(response.data);
             })
         .catch(function (error) {
+            console.log("api axios get: eventoes ERROR.");
             console.log(error);
         });
 };

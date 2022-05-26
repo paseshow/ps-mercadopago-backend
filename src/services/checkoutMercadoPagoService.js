@@ -15,10 +15,7 @@ function createPreferences(requestBody, nombreCuenta) {
         back_urls: {
             "success": "https://api2.test.mercadopago.paseshow.com.ar/notifications/exit",
             "failure": "https://api2.test.mercadopago.paseshow.com.ar/notifications/fail",
-            "pending": "https://api2.test.mercadopago.paseshow.com.ar/notifications/pending",
-            // "success": "https://www.paseshow.com.ar/test/#/operacion-mercado-pago-info",
-            // "failure": "https://www.paseshow.com.ar/fail_mercadopago",
-            // "pending": "https://www.paseshow.com.ar/pending_mercadopago"
+            "pending": "https://api2.test.mercadopago.paseshow.com.ar/notifications/pending"
         },
         payer: {
             "name": requestBody.clienteId.nombre,
