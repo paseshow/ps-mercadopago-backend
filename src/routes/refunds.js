@@ -37,7 +37,7 @@ router.post('/', (req, res) => {
 
             methodsDataBases.findByFieldSpecific('securityMercadoPago', 'userIdMp', resultQueryReference[0].collectorId).then(
                 resultFindSecurity => {
-                    console.log('methodsDataBases.findByFieldSpecific securityMercadoPago SUCCESS: ', rresultFindSecurity[resultFindSecurity.length -1 ].accessToken);
+                    console.log('methodsDataBases.findByFieldSpecific securityMercadoPago SUCCESS: ', resultFindSecurity[resultFindSecurity.length -1 ].accessToken);
 
                     mercadopago.configure({
                         access_token: resultFindSecurity[resultFindSecurity.length -1 ].accessToken
