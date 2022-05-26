@@ -1,4 +1,5 @@
 const Router = require('express');
+const { json } = require('express/lib/response');
 const router = Router();
 const mercadopago = require('mercadopago');
 const methodsDataBases = require('../config/dataBase');
@@ -25,17 +26,18 @@ router.post('/', (req, res) => {
     let jsonRequest = req.body.body;
 
     console.log("refounds/ (POST) INIT");
+    console.log(jsonRequest.idTransaccion);
 
     methodsDataBases.findByFieldSpecific('reservaReferenceMp', 'idTransaccionMp', jsonRequest.idTransaccion).then(
         resultQueryReference => {
             
             if (!resultQueryReference) return res.status(500);
 
-            console.log('methodsDataBases.findByFieldSpecific SUCCESS: ', resultQueryReference[0]);
+            console.log('methodsDataBases.findByFieldSpecific reservaReferenceMp SUCCESS: ', resultQueryReference[0].toString());
 
             methodsDataBases.findByFieldSpecific('securityMercadoPago', 'userIdMp', resultQueryReference[0].collectorId).then(
                 resultFindSecurity => {
-                    console.log('methodsDataBases.findByFieldSpecific SUCCESS: ', resultFindSecurity[resultFindSecurity.length -1 ]);
+                    console.log('methodsDataBases.findByFieldSpecific securityMercadoPago SUCCESS: ', resultFindSecurity[resultFindSecurity.length -1 ].toString());
 
                     mercadopago.configure({
                         access_token: resultFindSecurity[resultFindSecurity.length -1 ].accessToken
@@ -73,12 +75,12 @@ router.post('/', (req, res) => {
                                         }
                                     )
                                 }).catch(error => {
-                                    console.log("methodsDataBases.UpdateData ERROR: ",error);
+                                    console.log("methodsDataBases.UpdateData ERROR: ", error.toString());
                                     res.status(500);
                                     return res.json({});
                                 });
                         }).catch(error => {
-                            console.log("mercadopago.payment.refund ERROR: ", error);
+                            console.log("mercadopago.payment.refund ERROR: ", error.toString());
                             res.status(500);
                             return res.json({});
                         });
