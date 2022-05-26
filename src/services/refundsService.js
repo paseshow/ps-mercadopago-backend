@@ -1,4 +1,5 @@
 const mercadopago = require('mercadopago');
+const methodsDataBases = require('../config/dataBase');
 
 function refunds(res, jsonRequest, reference) {
     mercadopago.payment.refund(jsonRequest.idTransaccion)
