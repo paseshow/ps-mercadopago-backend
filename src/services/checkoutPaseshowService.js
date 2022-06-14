@@ -6,7 +6,7 @@ const { Insert, findByFieldSpecific, UpdateEstadoReserva } = require('../config/
 async function validReservaId(reservaId, eventoId, res, req) {
 
     // OBTENEMOS LOS DATOS DE LA RESERVA
-    await axios.get(process.env.URL_PASESHOW + `/reservas/${reservaId}/full?token=${process.env.TOKEN}`)
+    await axios.get(process.env.URL_PASESHOW + `/reservas/${reservaId}/full`, { 'headers': {'X-Auth-Token' : process.env.TOKEN}})
         .then(function (response) {
             let reservaById = response.data;
             console.log(`axion get /reservas/${reservaId}/full SUCCESS. `);
@@ -108,7 +108,7 @@ async function validReservaId(reservaId, eventoId, res, req) {
 
 // OBTENEMOS LOS EVENTOS DEL BACK DE PASESHOW
 async function getEventoes(token,res) {
-    await axios.get(process.env.URL_PASESHOW + `eventoes?token=${token}`)
+    await axios.get(process.env.URL_PASESHOW + `eventoes`, { 'headers': {'X-Auth-Token' : process.env.TOKEN}})
         .then(
             function (response) {
                 console.log("api axios get: eventoes SUCESS.");
@@ -126,7 +126,7 @@ function notifcationsReservaApproved(reservaId, req, res) {
 
     findByFieldSpecific('reservas', 'id', reservaId.data.external_reference).then(
         result => {
-            let urlPaseshow = `${process.env.URL_PASESHOW}reservas/notificacionmp?token=${process.env.TOKEN}`;
+            let urlPaseshow = `${process.env.URL_PASESHOW}reservas/notificacionmp`;
             let data = {
                 "id": result[0].id,
                 "fecha_notificacion": `${new Date().getTime()}`,
@@ -138,7 +138,8 @@ function notifcationsReservaApproved(reservaId, req, res) {
                 method: 'post',
                 url: urlPaseshow,
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'X-Auth-Token' : process.env.TOKEN
                 },
                 data: data
             }).then(function (responseAxios) {

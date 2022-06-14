@@ -13,7 +13,6 @@ const logFile = fs.createWriteStream(__dirname + '/node.log', { flags: 'w' });
 const logStdout = process.stdout;
 
 console.log = function (d) {
-    //console.log(d);
     logFile.write(util.format(d) + '\n');
     logStdout.write(util.format(d) + '\n');
 };
@@ -96,7 +95,7 @@ app.use('/', express.static('./src/views'));
 const server = require('http').Server(app);
 
 server.listen(appConfig.port, () => {
-    if (isTest) process.env.URL_PASESHOW = 'https://www.paseshow.com.ar/test/';
+    process.env.URL_PASESHOW = 'https://www.paseshow.com.ar/'.concat(isTest ? 'test/' : '' );
 
     authenticationServicePaseshow.generatedTokenPaseshow(null, null, null);
 
